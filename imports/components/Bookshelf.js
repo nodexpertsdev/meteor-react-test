@@ -35,12 +35,17 @@ export const BookshelfHelper = Wrapped => {
       this.setState({ selectedBookIds: newSelection });
     };
 
+    clearSelection = () => {
+      this.setState({ selectedBookIds: [] });
+    };
+
     render() {
       return (
         <Wrapped
           {...this.props}
           selectedBookIds={this.state.selectedBookIds}
           onToggleBookSelection={this.toggleBookSelection}
+          clearSelection={this.clearSelection}
         />
       );
     }
@@ -52,14 +57,17 @@ const Bookshelf = ({
   classes,
   onToggleBookSelection,
   selectedBookIds,
+  clearSelection,
 }) => {
   return (
     <div className={'bookshelf ' + classes.root}>
-      {books.map(book => (
+      {books.map((book, idx) => (
         <Book
           book={book}
+          key={`book-${idx}`}
           selected={selectedBookIds.indexOf(book.etag) >= 0}
           onClick={onToggleBookSelection}
+          clearSelection={clearSelection}
         />
       ))}
     </div>
@@ -70,6 +78,7 @@ Bookshelf.propTypes = {
   books: PropTypes.arrayOf(PropTypes.object).isRequired,
   onToggleBookSelection: PropTypes.func.isRequired,
   selectedBookIds: PropTypes.arrayOf(PropTypes.string).isRequired,
+  clearSelection: PropTypes.func,
 };
 
 export default injectSheet(styles)(Bookshelf);

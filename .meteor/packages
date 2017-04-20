@@ -29,3 +29,4 @@ accounts-base@1.2.16
 practicalmeteor:mocha
 shell-server@0.2.3
 mikowals:batch-insert
+chrismbeckett:toastr

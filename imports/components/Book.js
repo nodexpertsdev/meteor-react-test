@@ -23,7 +23,7 @@ const Book = ({ book, classes, onClick, selected }) => {
     _get(imageLinks, 'smallThumbnail') || 'http://placehold.it/128x187';
 
   return (
-    <div className={classes.root} onClick={onClick}>
+    <div className={classes.root} onClick={onClick.bind(this, book.etag)}>
       <div>
         <ReflectedImage
           float={selected}

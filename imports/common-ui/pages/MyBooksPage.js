@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import MyBooks from '/imports/components/MyBooks';
 
-const MyBooksPage = ({content}) => {
+const MyBooksPage = ({ content, classes }) => {
   return <div>
     <MyBooks />
   </div>

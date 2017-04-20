@@ -50,10 +50,20 @@ class BookFinder extends Component {
   };
 
   saveBooks = () => {
-    this.props.saveBooks.call({
+    const { selectedBookIds, saveBooks, clearSelection } = this.props;
+
+    saveBooks.call({
       books: this.state.books.filter(
-        book => this.props.selectedBookIds.indexOf(book.etag) >= 0,
+        book => selectedBookIds.indexOf(book.etag) >= 0,
       ),
+      etags: selectedBookIds,
+    }).then(success => {
+      toastr.success(
+        `${selectedBookIds.length} book${selectedBookIds.length > 1 ? 's' : ''} saved!`
+      );
+      clearSelection();
+    }).catch(error => {
+      toastr.error(`${error} Save failed!`);
     });
   };
 
@@ -100,13 +110,17 @@ class BookFinder extends Component {
           {this.state.bookCount} books found. Showing 40.
         </div>
         <div className={classes.manageButtons}>
-          <button onClick={this.saveBooks}>Save to My Collection</button>
+          <button
+            disabled={!this.props.selectedBookIds.length}
+            onClick={this.saveBooks}
+          >Save to My Collection</button>
         </div>
         <div className={classes.bookResults}>
           <Bookshelf
             books={this.state.books}
             selectedBookIds={this.props.selectedBookIds}
             onToggleBookSelection={this.props.onToggleBookSelection}
+            clearSelection={this.props.clearSelection}
           />
         </div>
       </div>
@@ -126,7 +140,7 @@ class BookFinder extends Component {
           />
           <button
             className={classes.searchButton}
-            disabled={this.state.fetching}
+            disabled={this.state.fetching || !this.state.query.length}
             type="submit"
           >
             Search
